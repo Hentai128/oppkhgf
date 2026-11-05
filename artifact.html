@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست ویدیو و چت - کلاسینو</title>
+    <!-- لود کردن کتابخانه Jitsi -->
+    <script src="https://meet.jit.si/external_api.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, sans-serif;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        #video-container {
+            flex-grow: 1;
+            width: 100%;
+        }
+        .controls {
+            padding: 10px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+        }
+        button:hover { background-color: #218838; }
+        .info {
+            color: #ccc;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<header>کلاس آنلاین آزمایشی (تست اتصال)</header>
+
+<div id="video-container"></div>
+
+<div class="controls">
+    <button onclick="startMeeting()">شروع جلسه جدید</button>
+    <button onclick="location.reload()" style="background-color: #dc3545;">پاک کردن و خروج</button>
+</div>
+
+<div class="info">
+    نکته: اگر در موبایل گیر کرد، چند لحظه صبر کنید یا از اینترنت دیگری استفاده کنید.
+</div>
+
+<script>
+    let api = null;
+
+    function startMeeting() {
+        // پاک کردن کانتینر قبلی اگر وجود داشت
+        document.getElementById('video-container').innerHTML = '';
+
+        // ایجاد یک نام اتاق تصادفی یا ثابت
+        // برای تست، یک نام ثابت بگذار تا دو نفر با یک نام وارد شوند
+        const roomName = "ClassinoTestRoom_9988"; 
+
+        const domain = "meet.jit.si";
+        const options = {
+            roomName: roomName,
+            width: '100%',
+            height: '100%',
+            parentNode: document.querySelector('#video-container'),
+            lang: 'fa',
+            interfaceConfigOverwrite: {
+                TOOLBAR_BUTTONS: [
+                    'microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen',
+                    'fodeviceselection', 'hangup', 'profile', 'chat', 'recording',
+                    'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand',
+                    'videoquality', 'displaycolorbar', 'fullscreen', 'help', 'mute-everyone'
+                ],
+            },
+            configOverwrite: {
+                startWithAudioMuted: false,
+                startWithVideoMuted: false
+            }
+        };
+
+        // اجرای جلسه
+        api = new JitsiMeetExternalAPI(domain, options);
+
+        api.addEventListener('videoConferenceJoined', () => {
+            console.log("اتصال برقرار شد!");
+        });
+    }
+</script>
+
+</body>
+</html>
